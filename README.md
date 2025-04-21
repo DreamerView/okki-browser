@@ -5,6 +5,8 @@
 It’s designed to be minimal, fast, and clean — giving you a desktop web experience with full control over the UI and behavior.  
 I developed it to explore custom browser logic, offline capabilities, and a lightweight user interface.
 
+![Preview](screen.gif)
+
 ## 🚀 Quick Start
 
 Make sure you have <a href="https://nodejs.org/">Node.js</a> installed on your system.
