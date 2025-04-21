@@ -22,8 +22,7 @@ The output will be located inside the <code>dist/</code> folder.
 
 ## 📥 Download Installer
 
-👉 <strong>[Download .exe (Windows)](https://example.com/okki-setup.exe)</strong>  
-<em>(replace this with your actual download or GitHub release link)</em>
+👉 <strong>[Download .exe (Windows)](https://disk.yandex.kz/d/MuAPp6y5flw6HQ)</strong>  
 
 ## 🧠 Features
 
