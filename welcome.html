@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Welcome</title>
+    <link rel="stylesheet" href="source/styles/bootstrap.min.css">
+    <script type="module" src="source/scripts/bootstrap.min.js" defer></script>
+    <style>
+        .background {
+            position: relative;
+        }
+        .background::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%; /* Ширина элемента */
+            height: 100vh; /* Высота элемента */
+            background-image: url('source/images/grids.206e1e19.jpg');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            z-index: -1;
+            opacity: 0.1;
+        }
+    </style>
+</head>
+<body class="background" data-bs-theme="light">
+    <div class="d-flex align-items-center justify-content-center vw-100 vh-100">
+            <div class="d-flex flex-column gap-5 w-100">
+                <img class="mx-auto" style="width: 256px; height: auto;" src="source/images/logo-search.png" alt="">
+                <input type="text" style="max-width: 800px; width:calc(100% - 32px);" class="form-control fs-5 bg-body-tertiary mx-auto" placeholder="Поиск в Интернете">
+            </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,23 @@
+{
+  "name": "okki-browser",
+  "version": "1.0.4",
+  "description": "Okki Browser created by Okki.kz",
+  "main": "app.js",
+  "scripts": {
+    "start": "electron .",
+    "pack": "npm version patch && electron-builder"
+  },
+  "keywords": [
+    "okki",
+    "browser"
+  ],
+  "author": "Okki.kz",
+  "license": "ISC",
+  "devDependencies": {
+    "electron": "^31.2.0",
+    "electron-builder": "^26.0.12"
+  },
+  "dependencies": {
+    "qrcode": "^1.5.3"
+  }
+}

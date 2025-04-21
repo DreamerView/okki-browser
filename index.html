@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="source/styles/bootstrap.min.css">
+    <style>
+        webview {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+
+        .nav-link {
+            color: var(--bs-secondary-color) !important;
+        }
+
+        .nav-link.active {
+            color: var(--bs-body-color) !important;
+        }
+
+        .hoverEffect:hover {
+            background-color: var(--bs-secondary-bg) !important;
+        }
+
+        .tab-close {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 24px;
+            height: 24px;
+            border-radius: 100%;
+        }
+
+        .close-browser:hover {
+            background-color: var(--bs-danger) !important;
+            color: #ffffff !important;
+        }
+    </style>
+    <script type="module" src="source/scripts/bootstrap.min.js" defer></script>
+</head>
+
+<body data-bs-theme="light">
+    <div class="modal fade" id="QRModal" tabindex="-1" aria-labelledby="QRModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="QRModalLabel">Website QR</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="d-flex align-items-center justify-content-center">
+                        <img id="qrcode" alt="QR Code will appear here">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="readTextModal" tabindex="-1" aria-labelledby="readTextModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-xl">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h1 class="modal-title fs-5" id="readTextModalLabel">Text</h1>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+              <div id="readTextHTML">
+
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    <header class="w-100">
+        <div class="bg-body-tertiary py-2 border-bottom border-light-subtle">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-lg-2 col-6 order-1 order-lg-1">
+                        <div class="d-flex">
+                            <button class="btn text-body-tertiary hoverEffect" type="button" id="back-history">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none"
+                                    xmlns="http://www.w3.org/2000/svg">
+                                    <path
+                                        d="M15.5831 4L8.9964 10.5866C8.62508 10.9633 8.41693 11.471 8.41693 12C8.41693 12.529 8.62508 13.0367 8.9964 13.4134L15.5831 20"
+                                        stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
+                                        stroke-linejoin="round" />
+                                </svg>
+                            </button>
+                            <button class="btn text-body-tertiary hoverEffect" type="button" id="forward-history">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none"
+                                    xmlns="http://www.w3.org/2000/svg">
+                                    <path
+                                        d="M8.41692 20L15.0036 13.4134C15.3749 13.0367 15.5831 12.529 15.5831 12C15.5831 11.471 15.3749 10.9633 15.0036 10.5866L8.41692 4"
+                                        stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
+                                        stroke-linejoin="round" />
+                                </svg>
+                            </button>
+                            <button class="btn text-body-tertiary hoverEffect" id="reload-page">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none"
+                                    xmlns="http://www.w3.org/2000/svg">
+                                    <path
+                                        d="M17.6054 7.70537C16.8708 6.96718 15.9972 6.38183 15.0351 5.98308C14.073 5.58435 13.0414 5.38013 12 5.38222C9.89717 5.38222 7.88054 6.21757 6.39364 7.70446C4.90674 9.19136 4.07141 11.208 4.07141 13.3107C4.07141 15.4146 4.9064 17.4323 6.39299 18.9209C7.87958 20.4095 9.89622 21.2472 12 21.25C14.1037 21.2472 16.1204 20.4095 17.607 18.9209C19.0936 17.4323 19.9286 15.4146 19.9286 13.3107"
+                                        stroke="currentColor" stroke-width="1.5" stroke-miterlimit="10"
+                                        stroke-linecap="round" />
+                                    <path
+                                        d="M16.8808 2.75L17.8292 6.60772C17.913 6.94965 17.858 7.31085 17.6763 7.61238C17.4945 7.9139 17.2009 8.13125 16.8594 8.21689L12.9911 9.16532"
+                                        stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
+                                        stroke-linejoin="round" />
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="col-lg-8 col-12 order-2 order-lg-2 mt-3 mt-lg-0">
+                        <div class="d-flex gap-2">
+                            <input id="url-input" type="text" class="form-control"
+                                placeholder="Введите поисковый запрос" aria-label="Username"
+                                aria-describedby="okki-http-search">
+                        </div>
+                    </div>
+                    <div class="col-lg-2 col-6 order-1 order-lg-3">
+                        <div class="d-flex justify-content-end">
+                            <div class="dropdown">
+                                <button class="btn text-body-tertiary hoverEffect" type="button"
+                                    data-bs-toggle="dropdown" aria-expanded="false">
+                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none"
+                                        xmlns="http://www.w3.org/2000/svg">
+                                        <path
+                                            d="M12 5.92C12.5302 5.92 12.96 5.49019 12.96 4.96C12.96 4.42981 12.5302 4 12 4C11.4698 4 11.04 4.42981 11.04 4.96C11.04 5.49019 11.4698 5.92 12 5.92Z"
+                                            stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
+                                            stroke-linejoin="round" />
+                                        <path
+                                            d="M12 12.96C12.5302 12.96 12.96 12.5302 12.96 12C12.96 11.4698 12.5302 11.04 12 11.04C11.4698 11.04 11.04 11.4698 11.04 12C11.04 12.5302 11.4698 12.96 12 12.96Z"
+                                            stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
+                                            stroke-linejoin="round" />
+                                        <path
+                                            d="M12 20C12.5302 20 12.96 19.5702 12.96 19.04C12.96 18.5098 12.5302 18.08 12 18.08C11.4698 18.08 11.04 18.5098 11.04 19.04C11.04 19.5702 11.4698 20 12 20Z"
+                                            stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
+                                            stroke-linejoin="round" />
+                                    </svg>
+                                </button>
+                                <ul class="dropdown-menu">
+                                    <li>
+                                        <button class="dropdown-item btn d-flex gap-2 align-items-center text-secondary"
+                                            id="changeTheme">
+                                            <svg id="darkTheme" width="20" height="20" class="text-info"
+                                                viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                <path
+                                                    d="M21.8801 15.1466C21.0128 17.6066 19.2384 19.6423 16.92 20.8376C14.6016 22.0329 11.9142 22.2974 9.40722 21.5771C6.90025 20.8569 4.76309 19.2062 3.43274 16.9625C2.10238 14.7189 1.6794 12.0518 2.25012 9.50662C2.64435 7.81886 3.45889 6.25816 4.61804 4.96963C5.77719 3.6811 7.24333 2.70658 8.88012 2.13662C9.19975 2.01741 9.54701 1.9931 9.88012 2.06662C10.2133 2.1298 10.5217 2.28577 10.77 2.5166C11.0128 2.74858 11.1863 3.04355 11.2711 3.3685C11.3559 3.69345 11.3487 4.03559 11.2501 4.35663C10.792 5.71849 10.764 7.18833 11.17 8.56662C11.4617 9.59113 12.0095 10.5245 12.7618 11.2786C13.5142 12.0327 14.4463 12.5826 15.4701 12.8766C16.8446 13.2858 18.3122 13.2578 19.67 12.7966C19.9969 12.7038 20.3432 12.7038 20.67 12.7966C20.995 12.8837 21.289 13.0601 21.5188 13.3058C21.7486 13.5514 21.9049 13.8566 21.9701 14.1866C22.0269 14.5089 21.9959 14.8405 21.8801 15.1466Z"
+                                                    fill="currentColor" />
+                                            </svg>
+                                            <svg id="lightTheme" style="display:none;" class="text-warning" width="20"
+                                                height="20" viewBox="0 0 24 24" fill="none"
+                                                xmlns="http://www.w3.org/2000/svg">
+                                                <path
+                                                    d="M17.8912 12C17.8912 13.1774 17.5414 14.3283 16.8862 15.307C16.2309 16.2858 15.2997 17.0485 14.2102 17.4986C13.1207 17.9486 11.9221 18.0658 10.7658 17.8354C9.60961 17.6049 8.54773 17.0372 7.71476 16.204C6.88179 15.3707 6.31513 14.3095 6.08638 13.1545C5.85764 11.9995 5.9771 10.8028 6.42973 9.71563C6.88237 8.62851 7.64782 7.69987 8.62916 7.04728C9.6105 6.3947 10.7636 6.0475 11.9426 6.04957C12.7247 6.04957 13.4991 6.20356 14.2215 6.50272C14.9439 6.80189 15.6002 7.24034 16.1527 7.79304C16.7052 8.34573 17.1431 9.00181 17.4415 9.72369C17.7398 10.4456 17.8926 11.2191 17.8912 12Z"
+                                                    fill="currentColor" />
+                                                <path
+                                                    d="M3.20314 13.0476H2.04913C1.77088 13.0476 1.50398 12.9372 1.30723 12.7408C1.11048 12.5443 1 12.2779 1 12C1 11.7222 1.11048 11.4557 1.30723 11.2592C1.50398 11.0627 1.77088 10.9524 2.04913 10.9524H3.20314C3.48139 10.9524 3.74828 11.0627 3.94503 11.2592C4.14178 11.4557 4.25227 11.7222 4.25227 12C4.25227 12.2779 4.14178 12.5443 3.94503 12.7408C3.74828 12.9372 3.48139 13.0476 3.20314 13.0476Z"
+                                                    fill="currentColor" />
+                                                <path
+                                                    d="M21.9509 13.0476H20.8074C20.5292 13.0476 20.2623 12.9372 20.0655 12.7408C19.8688 12.5443 19.7583 12.2779 19.7583 12C19.7583 11.7222 19.8688 11.4557 20.0655 11.2592C20.2623 11.0627 20.5292 10.9524 20.8074 10.9524H21.9509C22.2292 10.9524 22.4961 11.0627 22.6928 11.2592C22.8896 11.4557 23.0001 11.7222 23.0001 12C23.0001 12.2779 22.8896 12.5443 22.6928 12.7408C22.4961 12.9372 22.2292 13.0476 21.9509 13.0476Z"
+                                                    fill="currentColor" />
+                                                <path
+                                                    d="M11.9847 4.24763C11.7064 4.24763 11.4395 4.13724 11.2428 3.94077C11.046 3.74431 10.9355 3.47786 10.9355 3.20001V2.04762C10.9355 1.76977 11.046 1.50329 11.2428 1.30682C11.4395 1.11036 11.7064 1 11.9847 1C12.2629 1 12.5298 1.11036 12.7266 1.30682C12.9233 1.50329 13.0338 1.76977 13.0338 2.04762V3.20001C13.0338 3.47786 12.9233 3.74431 12.7266 3.94077C12.5298 4.13724 12.2629 4.24763 11.9847 4.24763Z"
+                                                    fill="currentColor" />
+                                                <path
+                                                    d="M11.9847 23.0001C11.7064 23.0001 11.4395 22.8897 11.2428 22.6932C11.046 22.4967 10.9355 22.2303 10.9355 21.9525V20.8001C10.9355 20.5222 11.046 20.2557 11.2428 20.0593C11.4395 19.8628 11.7064 19.7524 11.9847 19.7524C12.2629 19.7524 12.5298 19.8628 12.7266 20.0593C12.9233 20.2557 13.0338 20.5222 13.0338 20.8001V21.9525C13.0338 22.2303 12.9233 22.4967 12.7266 22.6932C12.5298 22.8897 12.2629 23.0001 11.9847 23.0001Z"
+                                                    fill="currentColor" />
+                                                <path
+                                                    d="M5.75269 6.82487C5.61388 6.8243 5.4765 6.79621 5.34864 6.74226C5.22078 6.68831 5.10489 6.60955 5.00772 6.51057L4.18937 5.70391C3.99182 5.50664 3.88086 5.23909 3.88086 4.96011C3.88086 4.68112 3.99182 4.41358 4.18937 4.21631C4.38693 4.01904 4.65496 3.9082 4.93434 3.9082C5.21372 3.9082 5.48163 4.01904 5.67918 4.21631L6.49753 5.03345C6.69293 5.22973 6.80259 5.49524 6.80259 5.77201C6.80259 6.04877 6.69293 6.31428 6.49753 6.51057C6.40036 6.60955 6.28448 6.68831 6.15661 6.74226C6.02875 6.79621 5.8915 6.8243 5.75269 6.82487Z"
+                                                    fill="currentColor" />
+                                                <path
+                                                    d="M19.0239 20.0458C18.7486 20.0447 18.4849 19.9356 18.2895 19.742L17.4712 18.9249C17.3613 18.831 17.2721 18.7154 17.2091 18.5854C17.1462 18.4554 17.1109 18.3139 17.1053 18.1696C17.0997 18.0253 17.124 17.8814 17.1767 17.747C17.2295 17.6126 17.3095 17.4905 17.4117 17.3884C17.514 17.2863 17.6362 17.2064 17.7708 17.1537C17.9055 17.101 18.0496 17.0768 18.1941 17.0823C18.3386 17.0879 18.4803 17.1232 18.6104 17.1861C18.7406 17.249 18.8564 17.3381 18.9505 17.4477L19.7688 18.2649C19.9642 18.4611 20.0739 18.7267 20.0739 19.0035C20.0739 19.2802 19.9642 19.5457 19.7688 19.742C19.6708 19.8391 19.5544 19.9159 19.4266 19.9681C19.2988 20.0202 19.1619 20.0466 19.0239 20.0458Z"
+                                                    fill="currentColor" />
+                                                <path
+                                                    d="M18.2164 6.82484C18.008 6.82605 17.8039 6.76524 17.6303 6.65021C17.4566 6.53518 17.3212 6.37114 17.2413 6.17896C17.1614 5.98678 17.1406 5.77519 17.1816 5.57116C17.2226 5.36714 17.3235 5.17995 17.4715 5.03341L18.2898 4.21627C18.4864 4.02115 18.7522 3.91162 19.0294 3.91162C19.3066 3.91162 19.5725 4.02115 19.7691 4.21627C19.8674 4.31366 19.9455 4.42951 19.9987 4.55718C20.052 4.68484 20.0794 4.82177 20.0794 4.96007C20.0794 5.09837 20.052 5.23531 19.9987 5.36297C19.9455 5.49063 19.8674 5.60648 19.7691 5.70387L18.9508 6.51053C18.7571 6.70792 18.4931 6.8209 18.2164 6.82484Z"
+                                                    fill="currentColor" />
+                                                <path
+                                                    d="M4.9343 20.0457C4.79623 20.0465 4.65935 20.02 4.53153 19.9679C4.40371 19.9158 4.28736 19.8389 4.18933 19.7418C3.99393 19.5456 3.88428 19.2801 3.88428 19.0033C3.88428 18.7265 3.99393 18.461 4.18933 18.2647L5.00768 17.4476C5.10521 17.3494 5.22126 17.2714 5.34911 17.2183C5.47696 17.1651 5.61415 17.1377 5.75265 17.1377C5.89115 17.1377 6.02822 17.1651 6.15606 17.2183C6.28391 17.2714 6.39996 17.3494 6.49749 17.4476C6.69289 17.6438 6.80255 17.9094 6.80255 18.1861C6.80255 18.4629 6.69289 18.7284 6.49749 18.9247L5.67914 19.7418C5.58111 19.8389 5.4649 19.9158 5.33707 19.9679C5.20925 20.02 5.07237 20.0465 4.9343 20.0457Z"
+                                                    fill="currentColor" />
+                                            </svg>
+                                            Change theme</button>
+                                    </li>
+                                    <li>
+                                        <button type="button" class="dropdown-item btn d-flex gap-2 align-items-center text-secondary"
+                                            id="generateQR" data-bs-toggle="modal" data-bs-target="#QRModal">
+                                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none"
+                                                xmlns="http://www.w3.org/2000/svg">
+                                                <path
+                                                    d="M9.43337 5.83337H6.73337C6.23632 5.83337 5.83337 6.23632 5.83337 6.73337V9.43337C5.83337 9.93043 6.23632 10.3334 6.73337 10.3334H9.43337C9.93043 10.3334 10.3334 9.93043 10.3334 9.43337V6.73337C10.3334 6.23632 9.93043 5.83337 9.43337 5.83337Z"
+                                                    stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
+                                                    stroke-linejoin="round" />
+                                                <path
+                                                    d="M9.43337 13.6475H6.73337C6.23632 13.6475 5.83337 14.0505 5.83337 14.5475V17.2475C5.83337 17.7446 6.23632 18.1475 6.73337 18.1475H9.43337C9.93043 18.1475 10.3334 17.7446 10.3334 17.2475V14.5475C10.3334 14.0505 9.93043 13.6475 9.43337 13.6475Z"
+                                                    stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
+                                                    stroke-linejoin="round" />
+                                                <path
+                                                    d="M17.2666 5.83337H14.5666C14.0696 5.83337 13.6666 6.23632 13.6666 6.73337V9.43337C13.6666 9.93043 14.0696 10.3334 14.5666 10.3334H17.2666C17.7637 10.3334 18.1666 9.93043 18.1666 9.43337V6.73337C18.1666 6.23632 17.7637 5.83337 17.2666 5.83337Z"
+                                                    stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
+                                                    stroke-linejoin="round" />
+                                                <path
+                                                    d="M17.2666 13.6666H14.5666C14.0696 13.6666 13.6666 14.0696 13.6666 14.5666V17.2666C13.6666 17.7637 14.0696 18.1666 14.5666 18.1666H17.2666C17.7637 18.1666 18.1666 17.7637 18.1666 17.2666V14.5666C18.1666 14.0696 17.7637 13.6666 17.2666 13.6666Z"
+                                                    stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
+                                                    stroke-linejoin="round" />
+                                                <path
+                                                    d="M21.25 8.91667V5.83333C21.25 5.01558 20.9251 4.23132 20.3469 3.65309C19.7687 3.07485 18.9844 2.75 18.1666 2.75H15.0833"
+                                                    stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
+                                                    stroke-linejoin="round" />
+                                                <path
+                                                    d="M15.0833 21.25H18.1666C18.9844 21.25 19.7687 20.9251 20.3469 20.3469C20.9251 19.7687 21.25 18.9844 21.25 18.1666V15.0833"
+                                                    stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
+                                                    stroke-linejoin="round" />
+                                                <path
+                                                    d="M2.75 15.0833V18.1666C2.75 18.9844 3.07485 19.7687 3.65309 20.3469C4.23132 20.9251 5.01558 21.25 5.83333 21.25H8.91667"
+                                                    stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
+                                                    stroke-linejoin="round" />
+                                                <path
+                                                    d="M8.91667 2.75H5.83333C5.01558 2.75 4.23132 3.07485 3.65309 3.65309C3.07485 4.23132 2.75 5.01558 2.75 5.83333V8.91667"
+                                                    stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
+                                                    stroke-linejoin="round" />
+                                            </svg>
+                                            Show QRCode
+                                        </button>
+                                    </li>
+                                    <li>
+                                        <button type="button" class="dropdown-item btn d-flex gap-2 align-items-center text-secondary"
+                                        id="generateReadText" data-bs-toggle="modal" data-bs-target="#readTextModal">
+                                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                <path d="M2.75 16.401C2.74999 16.5529 2.78008 16.7033 2.83852 16.8434C2.89696 16.9836 2.9826 17.1108 3.09048 17.2177C3.19837 17.3246 3.32636 17.409 3.46707 17.4662C3.60778 17.5233 3.75842 17.552 3.91028 17.5506C5.09695 17.5357 6.28182 17.6474 7.44484 17.8836C9.08473 18.0885 10.6491 18.6936 12 19.6455V6.44196C10.646 5.49579 9.08313 4.89129 7.44484 4.68005C6.26048 4.44188 5.05365 4.33381 3.84582 4.35775C3.55416 4.37687 3.28074 4.50637 3.08117 4.71991C2.8816 4.93346 2.77086 5.215 2.77149 5.50729L2.75 16.401Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                                                <path d="M21.25 16.401C21.25 16.5529 21.2199 16.7033 21.1615 16.8434C21.103 16.9836 21.0174 17.1108 20.9095 17.2177C20.8016 17.3246 20.6736 17.409 20.5329 17.4662C20.3922 17.5233 20.2416 17.552 20.0897 17.5506C18.9031 17.5357 17.7182 17.6474 16.5552 17.8836C14.9153 18.0885 13.3509 18.6936 12 19.6455V6.44196C13.354 5.49579 14.9169 4.89129 16.5552 4.68005C17.7395 4.44188 18.9464 4.33381 20.1542 4.35775C20.4458 4.37687 20.7193 4.50637 20.9188 4.71991C21.1184 4.93346 21.2291 5.215 21.2285 5.50729L21.25 16.401Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                                            </svg>
+                                            Show Read Text
+                                        </button>
+                                    </li>
+                                </ul>
+                            </div>
+                            <button class="btn text-body-tertiary hoverEffect" type="button" id="minimize-window">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none"
+                                    xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M19.5 12H4.5" stroke="currentColor" stroke-width="1.5"
+                                        stroke-linecap="round" stroke-linejoin="round" />
+                                </svg>
+                            </button>
+                            <button class="btn text-body-tertiary hoverEffect" type="button" id="maximize-window">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none"
+                                    xmlns="http://www.w3.org/2000/svg">
+                                    <path
+                                        d="M2.75 15.4688V18.9375C2.75 19.5508 2.99364 20.139 3.42732 20.5727C3.86099 21.0064 4.44919 21.25 5.0625 21.25H8.53125"
+                                        stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
+                                        stroke-linejoin="round" />
+                                    <path
+                                        d="M21.25 15.4688V18.9375C21.25 19.5508 21.0064 20.139 20.5727 20.5727C20.139 21.0064 19.5508 21.25 18.9375 21.25H15.4688"
+                                        stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
+                                        stroke-linejoin="round" />
+                                    <path
+                                        d="M2.75 8.53125V5.0625C2.75 4.44919 2.99364 3.86099 3.42732 3.42732C3.86099 2.99364 4.44919 2.75 5.0625 2.75H8.53125"
+                                        stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
+                                        stroke-linejoin="round" />
+                                    <path
+                                        d="M15.4688 2.75H18.9375C19.5508 2.75 20.139 2.99364 20.5727 3.42732C21.0064 3.86099 21.25 4.44919 21.25 5.0625V8.53125"
+                                        stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
+                                        stroke-linejoin="round" />
+                                </svg>
+                            </button>
+                            <button class="btn text-body-tertiary close-browser" type="button" id="close-window">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none"
+                                    xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M19 5L5 19" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
+                                        stroke-linejoin="round" />
+                                    <path d="M19 19L5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
+                                        stroke-linejoin="round" />
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <ul class="nav nav-tabs bg-body-tertiary" id="tabList">
+            <li class="nav-item tab-list">
+                <a class="nav-link active d-flex gap-2 link-secondary" href="#" data-url=""
+                    data-tab-id="okki13242342342342"><span class="truncate-tab">Новая вкладка</span> <span
+                        class="tab-close hoverEffect">&times;</span></a>
+            </li>
+            <li class="nav-item last-item">
+                <a class="nav-link hoverEffect" href="#" id="add-tab">+</a>
+            </li>
+        </ul>
+    </header>
+    <main class="col-12" id="webview-container">
+        <div id="preloader" class="bg-body w-100 h-100 position-absolute">
+            <div class="d-flex justify-content-center align-items-center h-100">
+                <div class="spinner-border" style="width: 6rem; height: 6rem;" role="status">
+                    <span class="visually-hidden">Loading...</span>
+                </div>
+            </div>
+        </div>
+        <webview id="webview" src="welcome.html" data-tab-id="okki13242342342342"></webview>
+    </main>
+    <script src="source/scripts/main.js" defer></script>
+    <script src="source/scripts/readText.js" defer></script>
+
+</body>
+
+</html>
